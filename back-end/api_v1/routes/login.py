@@ -1,7 +1,10 @@
+import jwt
 from flask import Blueprint, jsonify, make_response, request
+from flask_api import status
 
-from ..db import db_users, db_sessions
-from ..security.sec_utils import generate_token, check_hash
+from ...config_secrets import secrets
+from ..db import db_sessions, db_users
+from ..security.sec_utils import check_hash, generate_token
 
 login = Blueprint('/api/login', __name__)
 
@@ -25,4 +28,20 @@ def login_user():
     except Exception as e:
         print(e)
         return make_response(jsonify({"message": "Incorrect data"}), 400)
+
+@login.route("/api/login", methods=["DELETE"])
+def logout_user():
+    user_id = None
     
+    try:            
+        data = request.get_json()
+        raw_token = data["loginToken"]
+        decoded_token = jwt.decode(raw_token, secrets["secret_key"], algorithms=['HS256'])
+        user_id = decoded_token["user_id"]
+    except jwt.ExpiredSignatureError:
+        pass                 
+    except Exception as e:
+        return make_response(jsonify({"message": "Invalid token"}), 401)
+        
+    db_sessions.log_user_out(user_id)
+    return "", status.HTTP_204_NO_CONTENT    
