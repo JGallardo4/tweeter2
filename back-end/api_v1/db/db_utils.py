@@ -54,3 +54,23 @@ def put(command, arguments=[]):
             cursor.close()
         if (connection != None):        
             connection.close()
+
+def put_return_id(command, arguments=[]):
+    put_id = None
+
+    try:
+        connection = db_connect()
+        cursor = connection.cursor()
+        cursor.execute(command, arguments)
+        put_id = cursor.lastrowid
+        connection.commit()
+    except Exception as err:
+        print(err)
+        quit()    
+    else:        
+        if (cursor != None):
+            cursor.close()
+        if (connection != None):        
+            connection.close()
+    
+    return put_id

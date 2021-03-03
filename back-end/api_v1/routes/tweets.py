@@ -38,7 +38,7 @@ def create_tweet(user_id):
 
         new_tweet_id = db_tweets.create_tweet(user_id, content)
 
-        new_tweet = db_tweets.get_tweet_by_id(new_tweet_id)
+        new_tweet = db_tweets.get_tweet_by_id(new_tweet_id)        
 
         return make_response(jsonify(new_tweet), status.HTTP_200_OK)
     except Exception as e:
