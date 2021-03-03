@@ -16,18 +16,39 @@ def get_likes_by_tweet_id(tweet_id):
         ) AS User
         JOIN (
             SELECT
-                Id AS tweetId,
+                Tweet_Id AS tweetId,
                 User_Id as userId
             FROM
                 Tweet_Likes
             WHERE
-                tweetId = (?)
+                Tweet_Id = (?)
         ) AS Tweet_Likes ON  Tweet_Likes.userId = User.Id
         """, [tweet_id])
     return likes
 
 def get_all_likes():
-    pass
+    likes = get("""
+        SELECT
+	        tweetId,
+            userId,            
+            username
+        FROM
+        (
+            SELECT
+                Id,
+                Username as username
+            FROM
+                Users
+        ) AS User
+        JOIN (
+            SELECT
+                Tweet_Id AS tweetId,
+                User_Id as userId
+            FROM
+                Tweet_Likes
+        ) AS Tweet_Likes ON  Tweet_Likes.userId = User.Id
+        """)
+    return likes
 
 def create_like(tweet_id, user_id):
     put("""

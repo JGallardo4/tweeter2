@@ -18,10 +18,10 @@ def get_tweets():
         else:
             tweet_likes = db_tweet_likes.get_likes_by_tweet_id(tweet_id)             
             if tweet_likes:
-                return make_response(jsonify(user_tweets), status.HTTP_200_OK)
+                return make_response(jsonify(tweet_likes), status.HTTP_200_OK)
             else:
-                return make_response(jsonify({"message": "User not found"}), status.HTTP_404_NOT_FOUND)
-    # Get all Tweets
+                return make_response(jsonify({"message": "Like not found"}), status.HTTP_404_NOT_FOUND)
+    # Get all Tweet Likes
     else:
         result = db_tweet_likes.get_all_likes()
         if not result:
