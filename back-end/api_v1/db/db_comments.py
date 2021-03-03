@@ -105,15 +105,15 @@ def create_comment(user_id, tweet_id, content):
     return comment_id
 
 
-# def delete_tweet(user_id, tweet_id):
-#     deleted = put_return_row_count("""
-#         DELETE FROM
-# 	        Tweets
-#         WHERE
-#             Id = (?)
-#             AND User_Id = (?)""", [tweet_id, user_id])
+def delete_comment(user_id, comment_id):
+    deleted = put_return_row_count("""
+        DELETE FROM
+	        Comments
+        WHERE
+            User_Id = (?)
+            AND Id = (?)""", [user_id, comment_id])
 
-#     return deleted
+    return deleted
 
 # def update_tweet(user_id, tweet_id, content):
 #     put("""

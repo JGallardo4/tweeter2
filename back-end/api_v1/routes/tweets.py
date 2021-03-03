@@ -53,8 +53,6 @@ def delete_tweet(user_id):
         tweet_id = data["tweetId"]
         deleted = db_tweets.delete_tweet(user_id, tweet_id)
 
-        print(deleted)
-
         if deleted != 1:
             return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:

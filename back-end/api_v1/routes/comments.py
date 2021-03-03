@@ -36,28 +36,26 @@ def create_comment(user_id):
 
         new_comment = db_comments.get_comment_by_id(new_comment_id)        
 
-        return make_response(jsonify(new_comment), status.HTTP_200_OK)
+        return make_response(jsonify(new_comment), status.HTTP_201_CREATED)
     except Exception as e:
         print(e)
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# @tweets.route("/api/tweets", methods=["DELETE"])
-# @token_required
-# def delete_tweet(user_id):   
-#     try:
-#         data = request.get_json()
-#         tweet_id = data["tweetId"]
-#         deleted = db_tweets.delete_tweet(user_id, tweet_id)
+@comments.route("/api/comments", methods=["DELETE"])
+@token_required
+def delete_comment(user_id):   
+    try:
+        data = request.get_json()
+        comment_id = data["commentId"]
+        deleted = db_comments.delete_comment(user_id, comment_id)
 
-#         print(deleted)
-
-#         if deleted != 1:
-#             return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
-#         else:
-#             return "", status.HTTP_204_NO_CONTENT
-#     except Exception as e:
-#         print(e)
-#         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+        if deleted != 1:
+            return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return "", status.HTTP_204_NO_CONTENT
+    except Exception as e:
+        print(e)
+        return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # @tweets.route("/api/tweets", methods=["PATCH"])
 # @token_required
