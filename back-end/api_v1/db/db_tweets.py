@@ -55,6 +55,17 @@ def get_tweet_by_id(tweet_id):
         """, [tweet_id])
     return tweet
 
+def get_brief_tweet_by_id(tweet_id):
+    tweet = get("""
+        SELECT
+	        Id AS tweetId,
+            Content AS content
+        FROM
+            Tweets
+        WHERE
+            Id = (?)""", [tweet_id])
+    return tweet
+
 def get_all_tweets():
     tweets = get("""
         SELECT
@@ -100,3 +111,12 @@ def delete_tweet(user_id, tweet_id):
             AND User_Id = (?)""", [tweet_id, user_id])
 
     return deleted
+
+def update_tweet(user_id, tweet_id, content):
+    put("""
+        UPDATE 
+            Tweets
+        SET
+            Content = (?)
+        WHERE 
+            Id = (?) AND User_Id = (?)""", [content, tweet_id, user_id])

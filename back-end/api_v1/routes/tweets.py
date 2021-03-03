@@ -65,18 +65,16 @@ def delete_tweet(user_id):
 
 @tweets.route("/api/tweets", methods=["PATCH"])
 @token_required
-def update_tweet(user_id):   
+def update_tweet(user_id):
     try:
         data = request.get_json()
         tweet_id = data["tweetId"]
-        deleted = db_tweets.delete_tweet(user_id, tweet_id)
+        content = data["content"]
 
-        print(deleted)
-
-        if deleted != 1:
-            return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
-        else:
-            return "", status.HTTP_204_NO_CONTENT
+        db_tweets.update_tweet(user_id, tweet_id, content)
     except Exception as e:
         print(e)
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+    else:
+        tweet = db_tweets.get_brief_tweet_by_id(tweet_id)
+        return make_response(jsonify(tweet), status.HTTP_200_OK)
