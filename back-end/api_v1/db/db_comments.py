@@ -57,42 +57,6 @@ def get_comment_by_id(comment_id) :
         """, [comment_id])
     return comment
 
-# def get_brief_tweet_by_id(tweet_id):
-#     tweet = get("""
-#         SELECT
-# 	        Id AS tweetId,
-#             Content AS content
-#         FROM
-#             Tweets
-#         WHERE
-#             Id = (?)""", [tweet_id])
-#     return tweet
-
-# def get_all_tweets():
-#     tweets = get("""
-#         SELECT
-# 	        UserTweets.Id AS tweetId,
-#             User.Id AS userId,
-#             Content AS content,
-#             Created_At AS createdAt,
-#             Username AS username
-#         FROM
-#         (
-#             SELECT
-#                 Id,
-#                 Username
-#             FROM
-#                 Users
-#         ) AS User
-#         JOIN (
-#             SELECT
-#                 *
-#             FROM
-#                 Tweets
-#         ) AS UserTweets ON UserTweets.User_Id = User.Id
-#         """)
-#     return tweets
-
 def create_comment(user_id, tweet_id, content):
     created_at = datetime.now().strftime("%Y/%m/%d %H:%M:%S")
 
@@ -115,11 +79,13 @@ def delete_comment(user_id, comment_id):
 
     return deleted
 
-# def update_tweet(user_id, tweet_id, content):
-#     put("""
-#         UPDATE 
-#             Tweets
-#         SET
-#             Content = (?)
-#         WHERE 
-#             Id = (?) AND User_Id = (?)""", [content, tweet_id, user_id])
+def update_comment(content, user_id, comment_id):
+    updated = put_return_row_count("""
+        UPDATE 
+            Comments
+        SET
+            Content = (?)
+        WHERE 
+            User_Id = (?) AND Id = (?)""", [content, user_id, comment_id])
+    
+    return updated

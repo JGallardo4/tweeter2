@@ -57,18 +57,22 @@ def delete_comment(user_id):
         print(e)
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# @tweets.route("/api/tweets", methods=["PATCH"])
-# @token_required
-# def update_tweet(user_id):
-#     try:
-#         data = request.get_json()
-#         tweet_id = data["tweetId"]
-#         content = data["content"]
+@comments.route("/api/comments", methods=["PATCH"])
+@token_required
+def update_comment(user_id):
+    try:
+        data = request.get_json()
+        comment_id = data["commentId"]
+        content = data["content"]
 
-#         db_tweets.update_tweet(user_id, tweet_id, content)
-#     except Exception as e:
-#         print(e)
-#         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
-#     else:
-#         tweet = db_tweets.get_brief_tweet_by_id(tweet_id)
-#         return make_response(jsonify(tweet), status.HTTP_200_OK)
+        updated = db_comments.update_comment(content, user_id, comment_id)
+        
+        if updated != 1:
+            return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            comment = db_comments.get_comment_by_id(comment_id)
+            return make_response(jsonify(comment), status.HTTP_200_OK)        
+    except Exception as e:
+        print(e)
+        return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
