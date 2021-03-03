@@ -1,9 +1,9 @@
 from .db_utils import get, put, put_return_id, put_return_row_count, put_return_row_count
 
-def get_likes_by_tweet_id(tweet_id):
-    likes = get("""
+def get_likes_by_comment_id(comment_id):
+    comments = get("""
         SELECT
-	        tweetId,
+	        commentId,
             userId,            
             username
         FROM
@@ -16,20 +16,20 @@ def get_likes_by_tweet_id(tweet_id):
         ) AS User
         JOIN (
             SELECT
-                Tweet_Id AS tweetId,
+                Comment_Id AS commentId,
                 User_Id as userId
             FROM
-                Tweet_Likes
+                Comment_Likes
             WHERE
-                Tweet_Id = (?)
-        ) AS Tweet_Likes ON  Tweet_Likes.userId = User.Id
-        """, [tweet_id])
-    return likes
+                Comment_Id = (?)
+        ) AS Comment_Likes ON  Comment_Likes.userId = User.Id
+        """, [comment_id])
+    return comments
 
 def get_all_likes():
     likes = get("""
         SELECT
-	        tweetId,
+	        commentId,
             userId,            
             username
         FROM
@@ -42,43 +42,42 @@ def get_all_likes():
         ) AS User
         JOIN (
             SELECT
-                Tweet_Id AS tweetId,
+                Comment_Id AS commentId,
                 User_Id as userId
             FROM
-                Tweet_Likes
-        ) AS Tweet_Likes ON  Tweet_Likes.userId = User.Id
+                Comment_Likes
+        ) AS Comment_Likes ON  Comment_Likes.userId = User.Id
         """)
     return likes
 
-def create_like(tweet_id, user_id):
+def create_like(comment_id, user_id):
     put("""
     INSERT INTO
-        Tweet_Likes (Tweet_Id, User_Id)
-    VALUES (?, ?)""", [tweet_id, user_id])
+        Comment_Likes (Comment_Id, User_Id)
+    VALUES (?, ?)""", [comment_id, user_id])
 
-def like_exists(user_id, tweet_id):
+def like_exists(user_id, comment_id):
     like = get("""
         SELECT
             *
         FROM
-            Tweet_Likes
+            Comment_Likes
         WHERE
             User_Id = (?)
-            AND Tweet_Id = (?)""", [user_id, tweet_id])
+            AND Comment_Id = (?)""", [user_id, comment_id])
     
     if like:
         return True
     else:
         return False
 
-def delete_like(user_id, tweet_id):
+def delete_like(user_id, comment_id):
     deleted = put_return_row_count("""
         DELETE FROM
-            Tweet_Likes
+            Comment_Likes
         WHERE
             User_Id = (?)
-            AND Tweet_Id = (?)
-    """, [user_id, tweet_id])
+            AND Comment_Id = (?)""", [user_id, comment_id])
 
     if deleted == 1:
         return True

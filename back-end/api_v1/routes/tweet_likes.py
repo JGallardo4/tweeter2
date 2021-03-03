@@ -6,7 +6,7 @@ from ..db import db_tweet_likes
 tweet_likes = Blueprint('/api/tweet-likes', __name__)
 
 @tweet_likes.route("/api/tweet-likes", methods=["GET"])
-def get_tweets():
+def get_tweet_likes():
     data = request.get_json()    
 
     # Get Tweet Likes by Tweet Id
@@ -23,11 +23,11 @@ def get_tweets():
                 return make_response(jsonify({"message": "Like not found"}), status.HTTP_404_NOT_FOUND)
     # Get all Tweet Likes
     else:
-        result = db_tweet_likes.get_all_likes()
-        if not result:
+        likes = db_tweet_likes.get_all_likes()
+        if not likes:
             return make_response(jsonify({"message": "No results found"}), status.HTTP_404_NOT_FOUND)
         else:
-            return make_response(jsonify(result), status.HTTP_200_OK)
+            return make_response(jsonify(likes), status.HTTP_200_OK)
             
 @tweet_likes.route("/api/tweet-likes", methods=["POST"])
 @token_required
@@ -45,7 +45,6 @@ def create_tweet_like(user_id):
     except Exception as e:
         return "", status.HTTP_400_BAD_REQUEST
 
-#204
 @tweet_likes.route("/api/tweet-likes", methods=["DELETE"])
 @token_required
 def delete_tweet_like(user_id):   

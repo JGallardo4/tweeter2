@@ -11,6 +11,8 @@ from .api_v1.routes.followers import followers
 from .api_v1.routes.tweets import tweets
 from .api_v1.routes.tweet_likes import tweet_likes
 from .api_v1.routes.comments import comments
+from .api_v1.routes.comment_likes import comment_likes
+
 
 
 app = Flask(__name__)
@@ -24,6 +26,7 @@ app.register_blueprint(followers)
 app.register_blueprint(tweets)
 app.register_blueprint(tweet_likes)
 app.register_blueprint(comments)
+app.register_blueprint(comment_likes)
 
 app.debug = True
 
