@@ -44,3 +44,20 @@ def create_tweet_like(user_id):
             return "", status.HTTP_201_CREATED
     except Exception as e:
         return "", status.HTTP_400_BAD_REQUEST
+
+#204
+@tweet_likes.route("/api/tweet-likes", methods=["DELETE"])
+@token_required
+def delete_tweet_like(user_id):   
+    try:
+        data = request.get_json()   
+        tweet_id = data["tweetId"]
+        deleted = db_tweet_likes.delete_like(user_id, tweet_id)
+        print(deleted)
+
+        if deleted:
+            return "", status.HTTP_204_NO_CONTENT
+        else:
+            return "", status.HTTP_400_BAD_REQUEST
+    except Exception as e:
+        return "", status.HTTP_400_BAD_REQUEST

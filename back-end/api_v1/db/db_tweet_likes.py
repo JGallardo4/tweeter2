@@ -1,4 +1,4 @@
-from .db_utils import get, put, put_return_id, put_return_row_count
+from .db_utils import get, put, put_return_id, put_return_row_count, put_return_row_count
 
 def get_likes_by_tweet_id(tweet_id):
     likes = get("""
@@ -71,5 +71,16 @@ def like_exists(tweet_id, user_id):
     else:
         return False
 
-def delete_like(tweet_like_id):
-    pass
+def delete_like(user_id, tweet_id):
+    deleted = put_return_row_count("""
+        DELETE FROM
+            Tweet_Likes
+        WHERE
+            User_Id = (?)
+            AND Tweet_Id = (?)
+    """, [user_id, tweet_id])
+
+    if deleted == 1:
+        return True
+    else:
+        return False
