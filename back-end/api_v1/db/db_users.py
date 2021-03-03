@@ -84,13 +84,44 @@ def get_user_password(user_id):
 
 def update_user(user_id, data):
     if data.get("username"):
-        put("UPDATE Users SET Username = (?) WHERE Id = (?)", [data["username"], user_id])
+        put("""
+            UPDATE 
+                Users 
+            SET 
+                Username = (?) 
+            WHERE 
+                Id = (?)""", [data["username"], user_id])
+
     if data.get("email"):
-        put("UPDATE Users SET Email = (?) WHERE Id = (?)", [data["email"], user_id])
+        put("""
+            UPDATE 
+                Users 
+            SET 
+                Email = (?) 
+            WHERE 
+                Id = (?)""", [data["email"], user_id])
+
     if data.get("bio"):
-        put("UPDATE Users SET Bio = (?) WHERE Id = (?)", [data["bio"], user_id])
+        put("""
+            UPDATE 
+                Users 
+            SET 
+                Bio = (?) 
+            WHERE 
+                Id = (?)""", [data["bio"], user_id])
+
     if data.get("birthdate"):
-        put("UPDATE Users SET Birthdate = (?) WHERE Id = (?)", [data["birthdate"], user_id])
+        put("""
+            UPDATE 
+                Users 
+            SET 
+                Birthdate = (?) 
+            WHERE 
+                Id = (?)""", [data["birthdate"], user_id])
 
 def delete_user(user_id):
-    put("DELETE FROM Users WHERE Id = (?)", [user_id])
+    put("""
+        DELETE FROM 
+            Users 
+        WHERE 
+            Id = (?)""", [user_id])
