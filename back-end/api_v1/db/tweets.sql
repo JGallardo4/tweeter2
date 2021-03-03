@@ -1,4 +1,5 @@
-INSERT INTO
-	Tweets (User_Id, Content, Created_At)
-VALUES
-	(?, ?, ?,)
+DELETE FROM
+	Tweets
+WHERE
+	Id = (?)
+	AND User_Id = (?)

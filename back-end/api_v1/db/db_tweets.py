@@ -1,4 +1,4 @@
-from .db_utils import get, put, put_return_id
+from .db_utils import get, put, put_return_id, put_return_row_count
 from datetime import datetime
 
 def get_tweets_by_user_id(user_id):
@@ -90,3 +90,13 @@ def create_tweet(user_id, content):
 	        (?, ?, ?)""", [user_id, content, created_at])
 
     return tweet_id
+
+def delete_tweet(user_id, tweet_id):
+    deleted = put_return_row_count("""
+        DELETE FROM
+	        Tweets
+        WHERE
+            Id = (?)
+            AND User_Id = (?)""", [tweet_id, user_id])
+
+    return deleted

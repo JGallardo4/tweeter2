@@ -74,3 +74,23 @@ def put_return_id(command, arguments=[]):
             connection.close()
     
     return put_id
+    
+def put_return_row_count(command, arguments=[]):
+    row_count = None
+
+    try:
+        connection = db_connect()
+        cursor = connection.cursor()
+        cursor.execute(command, arguments)
+        row_count = cursor.rowcount
+        connection.commit()
+    except Exception as err:
+        print(err)
+        quit()    
+    else:        
+        if (cursor != None):
+            cursor.close()
+        if (connection != None):        
+            connection.close()
+    
+    return row_count
