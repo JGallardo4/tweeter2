@@ -8,6 +8,7 @@ from .api_v1.routes.users import users
 from .api_v1.routes.login import login
 from .api_v1.routes.follows import follows
 from .api_v1.routes.followers import followers
+from .api_v1.routes.tweets import tweets
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ app.register_blueprint(users)
 app.register_blueprint(login)
 app.register_blueprint(follows)
 app.register_blueprint(followers)
+app.register_blueprint(tweets)
 
 app.debug = True
 

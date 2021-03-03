@@ -21,7 +21,7 @@ def get(command, arguments=[]):
         cursor = connection.cursor()
         cursor.execute(command, arguments)
 
-        row_headers=[x[0].lower() for x in cursor.description]
+        row_headers=[x[0] for x in cursor.description]
 
         row_values = cursor.fetchall()
 
