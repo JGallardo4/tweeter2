@@ -1,30 +1,22 @@
 from flask import Blueprint, jsonify, make_response, request
 from flask_api import status
-from ..security.sec_utils import token_required
+from ..security.sec_utils import token_required, api_key_required
 from ..db import db_comments
 
 comments = Blueprint('/api/comments', __name__)
 
 @comments.route("/api/comments", methods=["GET"])
+@api_key_required
 def get_comments_by_tweet_id():
-    data = request.get_json()
-
-    # Get Comments by Tweet Id
-    if data:
-        try:
-            tweet_id = data["tweetId"]
-        except:
-            return "", status.HTTP_500_INTERNAL_SERVER_ERROR
-        else:
-            tweets_comments = db_comments.get_comments_by_tweet_id(tweet_id)             
-            if tweets_comments:
-                return make_response(jsonify(user_tweets), status.HTTP_200_OK)
-            else:
-                return make_response(jsonify({"message": "User not found"}), status.HTTP_404_NOT_FOUND)    
-    else:
+    try:
+        tweet_id = request.args["tweetId"]
+        tweets_comments = db_comments.get_comments_by_tweet_id(tweet_id)
+        return make_response(jsonify(user_tweets), status.HTTP_200_OK)
+    except:
         return "", status.HTTP_500_INTERNAL_SERVER_ERROR
 
 @comments.route("/api/comments", methods=["POST"])
+@api_key_required
 @token_required
 def create_comment(user_id):   
     try:
@@ -42,6 +34,7 @@ def create_comment(user_id):
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @comments.route("/api/comments", methods=["DELETE"])
+@api_key_required
 @token_required
 def delete_comment(user_id):   
     try:
@@ -58,6 +51,7 @@ def delete_comment(user_id):
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @comments.route("/api/comments", methods=["PATCH"])
+@api_key_required
 @token_required
 def update_comment(user_id):
     try:

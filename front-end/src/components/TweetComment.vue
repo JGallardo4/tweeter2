@@ -1,77 +1,139 @@
 <template>
-    <article>
-        <h5>{{ this.comment.username }}</h5>
-        <p v-if="editing">
-            <textarea v-model="newContent"></textarea>
-            <button @click="saveChanges">Save</button>
-            <button @click="cancelEdit">Cancel</button>
-        </p>
-        <p v-else>{{ this.comment.content }}</p>
-        <div v-if="owner">
-            <button @click="editing=true">Edit</button>
-            <button @click="deleteComment">Delete</button>
+  <article class="comment">
+    <p v-if="!isEdit" id="comment-content">{{ comment.content }}</p>
+    <comment-editor
+      v-if="isEdit"
+      :isEdit="true"
+      :comment="comment"
+      :tweetId="comment.tweetId"
+    ></comment-editor>
+
+    <section id="comment-info">
+      <!-- Edit -->
+      <section v-if="isEdit" id="edit-comment">
+        <p>hello world</p>
+      </section>
+
+      <!-- Delete -->
+      <button
+        v-if="userId == comment.userId"
+        @click="deleteComment()"
+        id="delete-button"
+      >
+        <div id="delete-icon"><font-awesome-icon icon="times" /></div></button
+      ><button
+        v-if="userId == comment.userId"
+        @click.prevent="() => (isEdit = !isEdit)"
+        id="edit-button"
+        title="Edit this Comment"
+      >
+        <div id="edit-icon">
+          <font-awesome-icon icon="pen" />
         </div>
-        <tweet-comment-like :commentId="comment.commentId"></tweet-comment-like>
-    </article>
+      </button>
+
+      <p id="comment-author">{{ comment.username }}</p>
+      <p id="comment-date">{{ comment.createdAt }}</p>
+    </section>
+  </article>
 </template>
 
 <script>
-import TweetCommentLike from './TweetCommentLike'
+import CommentEditor from './CommentEditor.vue';
 
 export default {
-    name: 'TweetComment',
-    props: [ 'comment' ],
-    components: { TweetCommentLike },
-    data(){ 
-        return {
-            editing: false,
-            newContent: ''
-        }
+  components: { CommentEditor },
+
+  name: 'tweet-comment',
+
+  data() {
+    return {
+      isEdit: false,
+    };
+  },
+
+  computed: {
+    userId() {
+      return this.$store.getters.getUserId;
     },
-    computed: {
-        owner() {
-            return this.comment.userId === this.loggedInUser().userId;
-        }
+  },
+
+  props: {
+    comment: {
+      type: Object,
     },
-    mounted() {
-        this.newContent = this.comment.content;
+  },
+
+  methods: {
+    deleteComment() {
+      this.$axios
+        .request({
+          url: '/comments',
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
+          },
+          data: {
+            loginToken: this.$store.getters.getLoginToken,
+            commentId: this.comment.commentId,
+          },
+        })
+        .then((response) => {
+          if (response.status === 204) {
+            this.$router.go(0);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    methods: {
-        cancelEdit() {
-            this.newContent = this.comment.content;
-            this.editing = false;
-        },
-        deleteComment() {
-            const confirmDelete = confirm('Are you sure you want to delete this comment?');
-            if (confirmDelete) {
-                this.$axios.request({
-                    method: 'DELETE',
-                    url: 'https://tweeterest.ml/api/comments',
-                    data: {
-                        loginToken: this.loginToken(),
-                        commentId: this.comment.commentId
-                    }
-                })
-                .then(() => {
-                    this.$emit('commentDeleted')
-                })
-            }
-        },
-        saveChanges() {
-            this.$axios.request({
-                method: 'PATCH',
-                url: 'https://tweeterest.ml/api/comments',
-                data: {
-                    loginToken: this.loginToken(),
-                    commentId: this.comment.commentId,
-                    content: this.newContent
-                }
-            })
-            .then(() => {
-                this.editing = false;
-                this.$emit('commentUpdated')
-            })
-        }
-    }
-}
+  },
+};
 </script>
+
+<style lang="scss" scoped>
+@mixin resetButton() {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+.comment {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  height: min-content;
+
+  #tweet-content {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    padding: 1rem;
+    place-self: center;
+  }
+
+  #comment-info {
+    grid-row: 2;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+
+    #edit-button {
+      @include resetButton;
+    }
+
+    #delete-button {
+      @include resetButton;
+      &:hover {
+        color: rgb(214, 76, 99);
+      }
+    }
+  }
+}
+</style>

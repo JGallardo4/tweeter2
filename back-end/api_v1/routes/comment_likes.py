@@ -1,18 +1,17 @@
 from flask import Blueprint, jsonify, make_response, request
 from flask_api import status
-from ..security.sec_utils import token_required
+from ..security.sec_utils import token_required, api_key_required
 from ..db import db_comment_likes
 
 comment_likes = Blueprint('/api/comment-likes', __name__)
 
 @comment_likes.route("/api/comment-likes", methods=["GET"])
+@api_key_required
 def get_comment_likes():
-    data = request.get_json()    
+    comment_id = request.args["commentId"]    
 
     # Get Comment Likes by Tweet Id
-    if data:
-        comment_id = data["commentId"]
-
+    if comment_id:
         if not comment_id:
             return make_response(None, status.HTTP_500_INTERNAL_SERVER_ERROR)            
         else:
@@ -30,6 +29,7 @@ def get_comment_likes():
             return make_response(jsonify(likes), status.HTTP_200_OK)
             
 @comment_likes.route("/api/comment-likes", methods=["POST"])
+@api_key_required
 @token_required
 def create_comment_like(user_id):   
     try:
@@ -46,6 +46,7 @@ def create_comment_like(user_id):
         return "", status.HTTP_400_BAD_REQUEST
 
 @comment_likes.route("/api/comment-likes", methods=["DELETE"])
+@api_key_required
 @token_required
 def delete_comment_like(user_id):   
     try:

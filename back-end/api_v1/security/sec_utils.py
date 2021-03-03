@@ -43,3 +43,15 @@ def token_required(f):
             else:
                 return make_response(jsonify({"message": "Please log in"}), 401)
     return decorated_function
+
+def api_key_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kws):
+        api_key = None
+        try:            
+            api_key = request.headers['X-Api-Key']
+            if api_key == secrets["api-key"]:                
+                return f(*args, **kws)
+        except Exception as e:
+            return make_response(jsonify({"message": "Invalid api key"}), 401)
+    return decorated_function

@@ -1,15 +1,17 @@
 from flask import Blueprint, jsonify, make_response, request
 from flask_api import status
+from ..security.sec_utils import api_key_required
+
 
 from ..db import db_followers, db_users
 
 followers = Blueprint('/api/followers', __name__)
 
 @followers.route("/api/followers", methods=["GET"])
+@api_key_required
 def get_followers():
     try:
-        data = request.get_json()
-        user_id = data["userId"]
+        user_id = request.args["userId"]
 
         if db_users.get_user_by_id(user_id):
             return make_response(jsonify(db_followers.get_followers(user_id)), status.HTTP_200_OK)

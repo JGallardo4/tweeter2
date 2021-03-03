@@ -1,26 +1,22 @@
 from flask import Blueprint, jsonify, make_response, request
 from flask_api import status
-from ..security.sec_utils import token_required
+from ..security.sec_utils import token_required, api_key_required
 from ..db import db_tweets
 
 tweets = Blueprint('/api/tweets', __name__)
 
 @tweets.route("/api/tweets", methods=["GET"])
+@api_key_required
 def get_tweets():
-    data = request.get_json()
-
+    user_id = request.args["userId"]
     # Get Tweets by User Id
-    if data:
-        try:
-            user_id = data["userId"]
-        except:
-            return make_response(None, status.HTTP_500_INTERNAL_SERVER_ERROR)
+    if user_id:
+        user_tweets = db_tweets.get_tweets_by_user_id(user_id)             
+        if user_tweets:
+            return make_response(jsonify(user_tweets), status.HTTP_200_OK)
         else:
-            user_tweets = db_tweets.get_tweets_by_user_id(user_id)             
-            if user_tweets:
-                return make_response(jsonify(user_tweets), status.HTTP_200_OK)
-            else:
-                return make_response(jsonify({"message": "User not found"}), status.HTTP_404_NOT_FOUND)
+            return make_response(jsonify({"message": "User not found"}), status.HTTP_404_NOT_FOUND)
+            
     # Get all Tweets
     else:
         result = db_tweets.get_all_tweets()
@@ -30,6 +26,7 @@ def get_tweets():
             return make_response(jsonify(result), status.HTTP_200_OK)
 
 @tweets.route("/api/tweets", methods=["POST"])
+@api_key_required
 @token_required
 def create_tweet(user_id):   
     try:
@@ -46,6 +43,7 @@ def create_tweet(user_id):
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @tweets.route("/api/tweets", methods=["DELETE"])
+@api_key_required
 @token_required
 def delete_tweet(user_id):   
     try:
@@ -62,6 +60,7 @@ def delete_tweet(user_id):
         return make_response("", status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @tweets.route("/api/tweets", methods=["PATCH"])
+@api_key_required
 @token_required
 def update_tweet(user_id):
     try:

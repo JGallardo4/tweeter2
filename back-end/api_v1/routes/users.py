@@ -6,24 +6,20 @@ from flask_api import status
 
 from ..db import db_users
 from ..security.sec_utils import (check_hash, generate_hash, generate_token,
-                                  token_required)
+                                  token_required, api_key_required)
 
 users = Blueprint('/api/users', __name__)
 
 @users.route("/api/users", methods=["GET"])
+@api_key_required
 def get_users():
-    data = request.get_json()
-    if data:
-        try:
-            userId = data["userId"]
-        except:
-            return make_response(None, 500)
+    userId = request.args["userId"]
+    if userId:        
+        user = db_users.get_user_by_id(userId)             
+        if user:
+            return make_response(jsonify(user), 200)
         else:
-            user = db_users.get_user_by_id(userId)             
-            if user:
-                return make_response(jsonify(user), 200)
-            else:
-                return make_response(jsonify({"message": "User not found"}), 404)
+            return make_response(jsonify({"message": "User not found"}), 404)
     else:
         result = db_users.get_all_users()
         if not result:
@@ -32,6 +28,7 @@ def get_users():
             return make_response(jsonify(result), 200)    
 
 @users.route("/api/users", methods=["POST"])
+@api_key_required
 def create_user():
     try:
         data = request.get_json()
@@ -57,6 +54,7 @@ def create_user():
         return make_response(jsonify(new_user), 201)
 
 @users.route("/api/users", methods=["PATCH"])
+@api_key_required
 @token_required
 def update_user(user_id):
     data = request.get_json()
@@ -71,6 +69,7 @@ def update_user(user_id):
     return make_response(jsonify({"message": "User updated"}), 200)
     
 @users.route("/api/users", methods=["DELETE"])
+@api_key_required
 @token_required
 def delete_user(user_id):
     data = request.get_json()
