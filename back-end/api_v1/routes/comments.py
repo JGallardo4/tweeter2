@@ -8,12 +8,12 @@ comments = Blueprint('/api/comments', __name__)
 @comments.route("/api/comments", methods=["GET"])
 @api_key_required
 def get_comments_by_tweet_id():
-    try:
-        tweet_id = request.args["tweetId"]
-        tweets_comments = db_comments.get_comments_by_tweet_id(tweet_id)
-        return make_response(jsonify(user_tweets), status.HTTP_200_OK)
-    except:
-        return "", status.HTTP_500_INTERNAL_SERVER_ERROR
+    tweet_id = request.args["tweetId"]
+    if tweet_id:        
+        tweet_comments = db_comments.get_comments_by_tweet_id(tweet_id)
+        return make_response(jsonify(tweet_comments), status.HTTP_200_OK)
+    else:
+        return "", status.HTTP_400_BAD_REQUEST      
 
 @comments.route("/api/comments", methods=["POST"])
 @api_key_required

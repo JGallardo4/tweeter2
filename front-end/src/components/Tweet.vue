@@ -92,10 +92,10 @@
 </template>
 
 <script>
-import TweeterComments from './TweeterComments.vue';
+import TweeterComments from "./TweeterComments.vue";
 
 export default {
-  name: 'Tweet',
+  name: "Tweet",
 
   data() {
     return {
@@ -142,55 +142,47 @@ export default {
 
   methods: {
     deleteTweet() {
-      this.$store.dispatch('deleteTweet', {
+      this.$store.dispatch("deleteTweet", {
         loginToken: this.loginToken,
         tweetId: this.tweet.tweetId,
       });
 
-      this.$store.dispatch('refreshTweets');
+      this.$store.dispatch("refreshTweets");
     },
 
     toggleFollow() {
       this.isFollowed
-        ? this.$store.dispatch('unfollowUser', {
-          loginToken: this.loginToken,
-          followId: this.tweet.userId,
-        })
-        : this.$store.dispatch('followUser', {
-          loginToken: this.loginToken,
-          followId: this.tweet.userId,
-        });
+        ? this.$store.dispatch("unfollowUser", {
+            loginToken: this.loginToken,
+            followId: this.tweet.userId,
+          })
+        : this.$store.dispatch("followUser", {
+            loginToken: this.loginToken,
+            followId: this.tweet.userId,
+          });
     },
 
     toggleLikeTweet() {
       this.isLiked
-        ? this.$store.dispatch('unlikeTweet', {
-          loginToken: this.loginToken,
-          tweetId: this.tweet.tweetId,
-        })
-        : this.$store.dispatch('likeTweet', {
-          loginToken: this.loginToken,
-          tweetId: this.tweet.tweetId,
-        });
+        ? this.$store.dispatch("unlikeTweet", {
+            loginToken: this.loginToken,
+            tweetId: this.tweet.tweetId,
+          })
+        : this.$store.dispatch("likeTweet", {
+            loginToken: this.loginToken,
+            tweetId: this.tweet.tweetId,
+          });
 
       this.refreshLikedBy();
     },
 
     editTweet() {
-      this.$store.dispatch('redirectAction', 'edit');
+      this.$store.dispatch("redirectAction", "edit");
     },
 
     refreshLikedBy() {
       this.$axios
-        .request({
-          url: '/tweet-likes',
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
-          },
-          params: { tweetId: this.tweet.tweetId },
-        })
+        .get("/tweet-likes", { params: { tweetId: this.tweet.tweetId } })
         .then((response) => {
           if (response.status === 200) {
             this.likedBy = response.data.map((user) => user.userId);
@@ -203,11 +195,11 @@ export default {
     refreshComments() {
       this.$axios
         .request({
-          url: '/comments',
-          method: 'GET',
+          url: "/comments",
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
+            "Content-Type": "application/json",
+            "X-Api-Key": "1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD",
           },
           params: { tweetId: this.tweet.tweetId },
         })

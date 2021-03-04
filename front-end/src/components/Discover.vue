@@ -1,18 +1,14 @@
 <template>
   <section id="discover">
-    <button @click="refresh()" id="refresh-button">
-      Refresh
-    </button>
-
     <tweet-grid :tweets="tweets"></tweet-grid>
   </section>
 </template>
 
 <script>
-import TweetGrid from './TweetGrid.vue';
+import TweetGrid from "./TweetGrid.vue";
 
 export default {
-  name: 'discover',
+  name: "discover",
 
   computed: {
     tweets() {
@@ -22,7 +18,7 @@ export default {
 
   methods: {
     refresh() {
-      this.$store.dispatch('refreshTweets');
+      this.$store.dispatch("refreshTweets");
     },
   },
 

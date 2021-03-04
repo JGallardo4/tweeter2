@@ -8,7 +8,11 @@ tweets = Blueprint('/api/tweets', __name__)
 @tweets.route("/api/tweets", methods=["GET"])
 @api_key_required
 def get_tweets():
-    user_id = request.args["userId"]
+    user_id = None
+
+    if request.args:
+        user_id = request.args["userId"]
+        
     # Get Tweets by User Id
     if user_id:
         user_tweets = db_tweets.get_tweets_by_user_id(user_id)             

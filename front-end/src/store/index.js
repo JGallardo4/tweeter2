@@ -17,6 +17,8 @@ export default new Vuex.Store({
     loginToken: "",
     follows: [],
     allTweets: [],
+    allLikes: [],
+    likedTweets: [],
   },
 
   getters: {
@@ -38,6 +40,14 @@ export default new Vuex.Store({
 
     getFollows(state) {
       return state.follows;
+    },
+
+    getLikedTweets(state) {
+      return state.likedTweets;
+    },
+
+    getAllLikes(state) {
+      return state.allLikes;
     },
   },
 
@@ -66,6 +76,14 @@ export default new Vuex.Store({
 
     SET_FOLLOWS(state, payload) {
       state.follows = payload;
+    },
+
+    SET_LIKED_TWEETS(state, payload) {
+      state.likedTweets = payload;
+    },
+
+    SET_ALL_LIKES(state, payload) {
+      state.allLikes = payload;
     },
   },
 
@@ -145,7 +163,7 @@ export default new Vuex.Store({
 
     refreshTweets({ commit, state }) {
       axios
-        .get("/tweets", { params: { userId: state.userId } })
+        .get("/tweets")
         .then((response) => {
           if (response.status === 200) {
             commit("SET_TWEETS", response.data);
@@ -163,7 +181,7 @@ export default new Vuex.Store({
           if (response.status === 200) {
             commit(
               "SET_FOLLOWS",
-              response.data.map((user) => user.userId)
+              response.data.map((user) => user["userId"])
             );
           }
         })
@@ -214,7 +232,6 @@ export default new Vuex.Store({
       axios
         .get("/users")
         .then((response) => response.data.map((user) => user.userId))
-        .then(console.log)
         .catch((error) => {
           console.log(error);
         });
@@ -236,12 +253,21 @@ export default new Vuex.Store({
         });
     },
 
-    refreshLikes() {
+    loadLikedTweets({ commit }) {
       axios
         .get("/tweet-likes")
-        .then((response) => response.data.map((user) => user.userId))
-        .then((response) => (this.likedBy = response))
+        .then((response) => commit("SET_ALL_LIKES", response.data))
         .catch(console.log);
+
+      var userLikes = this.getters.getAllLikes
+        .filter((like) => like["userId"] === this.getters.getUserId)
+        .map((like) => like["tweetId"]);
+
+      var likedTweets = this.getters.getAllTweets.filter((tweet) =>
+        userLikes.includes(tweet["tweetId"])
+      );
+
+      commit("SET_LIKED_TWEETS", likedTweets);
     },
 
     unlikeTweet(state, payload) {

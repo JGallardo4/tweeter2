@@ -53,5 +53,6 @@ def api_key_required(f):
             if api_key == secrets["api-key"]:                
                 return f(*args, **kws)
         except Exception as e:
+            print(e)
             return make_response(jsonify({"message": "Invalid api key"}), 401)
     return decorated_function

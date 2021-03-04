@@ -4,11 +4,11 @@ from .db_utils import get, put
 def get_follows(user_id):
     return get("""
         SELECT
-            Id,
-            Email,
-            Username,
-            Bio,
-            Birthdate
+            Id AS userId,
+            Email AS email,
+            Username AS username,
+            Bio AS bio,
+            Birthdate AS birthdate
         FROM
             (
                 SELECT

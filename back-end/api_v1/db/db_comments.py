@@ -25,9 +25,9 @@ def get_comments_by_tweet_id(tweet_id):
                 Comments
             WHERE
                 Tweet_Id = (?)
-        ) AS TweetComments ON TweetComments.User_Id = Users.Id
+        ) AS TweetComments ON TweetComments.User_Id = User.Id
         """, [tweet_id])
-    return tweets
+    return comments
 
 def get_comment_by_id(comment_id) :
     comment = get("""

@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import TweetComment from './TweetComment.vue';
-import CommentEditor from './CommentEditor.vue';
+import TweetComment from "./TweetComment.vue";
+import CommentEditor from "./CommentEditor.vue";
 
 export default {
-  name: 'tweeter-comments',
+  name: "tweeter-comments",
 
   props: {
     tweetId: {
@@ -42,15 +42,7 @@ export default {
   methods: {
     refreshComments() {
       this.$axios
-        .request({
-          url: '/comments',
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
-          },
-          params: { tweetId: this.tweetId },
-        })
+        .get("/comments", { params: { tweetId: this.tweetId } })
         .then((response) => {
           if (response.status === 200) {
             this.comments = response.data;

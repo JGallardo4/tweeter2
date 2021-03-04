@@ -1,4 +1,4 @@
-from .db_utils import get, put
+from .db_utils import get, put, get_return_row_count
 from datetime import datetime
 
 def create_user(email, username, bio, birthdate, password):
@@ -125,3 +125,14 @@ def delete_user(user_id):
             Users 
         WHERE 
             Id = (?)""", [user_id])
+
+def user_exists(user_id):
+    count = get_return_row_count("""
+    SELECT 
+        *
+    FROM
+        Users
+    WHERE
+        Id = (?)""", [user_id])
+
+    return count

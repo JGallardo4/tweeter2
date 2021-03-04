@@ -1,9 +1,5 @@
 <template>
   <section id="my-tweets">
-    <button @click="refresh()" id="refresh-button">
-      Refresh
-    </button>
-
     <tweet-grid :tweets="tweets"></tweet-grid>
   </section>
 </template>

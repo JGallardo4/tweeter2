@@ -11,12 +11,15 @@ follows = Blueprint('/api/follows', __name__)
 def get_follows():
     try:
         user_id = request.args["userId"]
-        follows = db_followings.get_follows(user_id)
 
-        if follows:
-            return make_response(jsonify(follows), status.HTTP_200_OK)
-        else:
+        print(db_users.user_exists(user_id))
+
+        if not db_users.user_exists(user_id):
             return make_response(jsonify({"message": "User not found"}), status.HTTP_404_NOT_FOUND)
+
+        follows = db_followings.get_follows(user_id)
+        
+        return make_response(jsonify(follows), status.HTTP_200_OK)            
     except Exception as e:
         print(e)
         return "", status.HTTP_400_BAD_REQUEST        

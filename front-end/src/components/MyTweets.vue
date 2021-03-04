@@ -1,30 +1,26 @@
 <template>
   <section id="my-tweets">
-    <button @click="refresh()" id="refresh-button">
-      Refresh
-    </button>
-
     <tweet-grid :tweets="tweets"></tweet-grid>
   </section>
 </template>
 
 <script>
-import TweetGrid from './TweetGrid.vue';
+import TweetGrid from "./TweetGrid.vue";
 
 export default {
-  name: 'my-tweets',
+  name: "my-tweets",
 
   computed: {
     tweets() {
       return this.$store.getters.getAllTweets.filter(
-        (tweet) => tweet.userId == this.$store.getters.getUserId,
+        (tweet) => tweet.userId == this.$store.getters.getUserId
       );
     },
   },
 
   methods: {
     refresh() {
-      this.$store.dispatch('refreshTweets');
+      this.$store.dispatch("refreshTweets");
     },
   },
 

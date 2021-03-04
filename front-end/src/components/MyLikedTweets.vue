@@ -1,32 +1,20 @@
 <template>
   <section id="my-tweets">
-    <button @click="refreshLikedTweets()" id="refresh-button">
-      Refresh
-    </button>
-
     <tweet-grid :tweets="likedTweets"></tweet-grid>
   </section>
 </template>
 
 <script>
 import TweetGrid from "./TweetGrid.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "my-liked-tweets",
 
-  computed: {
-    likedTweets: () => {
-      this.$axios
-        .get("/tweet-likes")
-        .then((response) => {
-          response.data.filter(
-            (tweet) => tweet.userId == this.$store.getters.getUserId
-          );
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+  computed: mapState(["likedTweets"]),
+
+  created() {
+    this.$store.dispatch("loadLikedTweets");
   },
 
   components: {

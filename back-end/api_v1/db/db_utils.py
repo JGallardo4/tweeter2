@@ -32,7 +32,6 @@ def get(command, arguments=[]):
         result = json_data
     except Exception as err:
         print(err)
-        quit()    
     else:        
         if (cursor != None):
             cursor.close()
@@ -48,7 +47,6 @@ def put(command, arguments=[]):
         connection.commit()
     except Exception as err:
         print(err)
-        quit()    
     else:        
         if (cursor != None):
             cursor.close()
@@ -66,7 +64,6 @@ def put_return_id(command, arguments=[]):
         connection.commit()
     except Exception as err:
         print(err)
-        quit()    
     else:        
         if (cursor != None):
             cursor.close()
@@ -86,7 +83,6 @@ def put_return_row_count(command, arguments=[]):
         connection.commit()
     except Exception as err:
         print(err)
-        quit()    
     else:        
         if (cursor != None):
             cursor.close()
@@ -94,3 +90,26 @@ def put_return_row_count(command, arguments=[]):
             connection.close()
     
     return row_count
+
+def get_return_row_count(command, arguments=[]):
+    row_count = None
+    
+    try:
+        connection = db_connect()
+        cursor = connection.cursor()  
+        cursor.execute(command, arguments)
+
+        row_count = len(cursor.fetchall()) == 1
+
+        connection.commit()
+    except Exception as err:
+        print(err)
+    else:        
+        if (cursor != None):
+            cursor.close()
+        if (connection != None):        
+            connection.close()
+
+    return row_count
+    
+    
