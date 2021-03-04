@@ -39,16 +39,17 @@ axios.defaults.headers.common["X-Api-Key"] =
 
 axios.defaults.baseURL = "http://127.0.0.1:5000/api";
 
+// Log user out when token expires
 axios.interceptors.response.use(
-  function(response) {
-    if (response.status.valueOf() === 401) {
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      console.log("invalid token!");
       store.dispatch("logOut");
+      return Promise.reject(error);
     } else {
-      return response;
+      throw error;
     }
-  },
-  function(error) {
-    return Promise.reject(error);
   }
 );
 

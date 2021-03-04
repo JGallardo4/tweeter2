@@ -4,7 +4,7 @@
       <div id="tweeter-icon">
         <font-awesome-icon icon="crow" />
       </div>
-      <p id="site-title">Tweeter</p>
+      <p id="site-title">Tweeter 2</p>
     </router-link>
     <section v-if="isLoggedIn" id="user-menu">
       <router-link to="/profile" id="user-link">
