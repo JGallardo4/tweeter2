@@ -4,14 +4,14 @@ import mariadb
 from flask import Flask
 from flask_cors import CORS
 
-from .api_v1.routes.users import users
-from .api_v1.routes.login import login
-from .api_v1.routes.follows import follows
-from .api_v1.routes.followers import followers
-from .api_v1.routes.tweets import tweets
-from .api_v1.routes.tweet_likes import tweet_likes
-from .api_v1.routes.comments import comments
-from .api_v1.routes.comment_likes import comment_likes
+from .api.routes.users import users
+from .api.routes.login import login
+from .api.routes.follows import follows
+from .api.routes.followers import followers
+from .api.routes.tweets import tweets
+from .api.routes.tweet_likes import tweet_likes
+from .api.routes.comments import comments
+from .api.routes.comment_likes import comment_likes
 
 
 
