@@ -2,7 +2,7 @@ import jwt
 from flask import Blueprint, jsonify, make_response, request
 from flask_api import status
 
-from ...config_secrets import secrets
+from config_secrets import secrets
 from ..db import db_sessions, db_users
 from ..security.sec_utils import check_hash, generate_token, api_key_required
 

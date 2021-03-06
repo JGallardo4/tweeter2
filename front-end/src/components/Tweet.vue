@@ -82,7 +82,15 @@
         </div>
       </button>
 
-      <p id="tweet-author">{{ tweet.username }}</p>
+      <router-link
+        :to="{
+          name: 'UserProfile',
+          params: { userId: this.tweet.userId },
+        }"
+      >
+        <p id="tweet-author">{{ tweet.username }}</p>
+      </router-link>
+
       <p id="tweet-date">{{ tweet.createdAt }}</p>
     </section>
 
@@ -258,6 +266,10 @@ export default {
     align-items: center;
     gap: 1rem;
     padding: 1rem;
+    a {
+      color: inherit; /* blue colors for links too */
+      text-decoration: inherit; /* no underline */
+    }
   }
 
   #like-icon {

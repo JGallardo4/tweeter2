@@ -128,7 +128,6 @@ export default new Vuex.Store({
           .post("/users", payload)
           .then((response) => {
             if (response.status === 201) {
-              commit("SET_AUTHENTICATED", true);
               commit("SET_USERID", response.data.userId);
               commit("SET_USERNAME", response.data.username);
               commit("SET_LOGIN_TOKEN", response.data.loginToken);
@@ -232,6 +231,14 @@ export default new Vuex.Store({
       axios
         .get("/users")
         .then((response) => response.data.map((user) => user.userId))
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    getUser(state, payload) {
+      return axios
+        .get("/users", { params: { userId: payload } })
         .catch((error) => {
           console.log(error);
         });

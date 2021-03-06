@@ -5,7 +5,7 @@ from functools import wraps
 from ..db import db_users, db_sessions
 import jwt
 
-from ...config_secrets import secrets
+from config_secrets import secrets
 
 def generate_token(user_id):
     expiry = datetime.utcnow() + timedelta(minutes=+30)

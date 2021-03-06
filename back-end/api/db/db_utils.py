@@ -1,7 +1,7 @@
 from flask import jsonify
 from mariadb import connect
 
-from ...config_secrets import secrets
+from config_secrets import secrets
 
 connection = None
 cursor = None

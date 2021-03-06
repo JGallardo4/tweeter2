@@ -44,15 +44,19 @@
 </template>
 
 <script>
-import TweeterHeader from '../components/TweeterHeader.vue';
+import TweeterHeader from "../components/TweeterHeader.vue";
 
 export default {
-  name: 'profile',
+  name: "profile",
 
   data() {
     return {
       input: {
-        userId: '', email: '', username: '', bio: '', birthdate: '',
+        userId: "",
+        email: "",
+        username: "",
+        bio: "",
+        birthdate: "",
       },
 
       isEdit: false,
@@ -66,11 +70,11 @@ export default {
   mounted() {
     this.$axios
       .request({
-        url: '/users',
-        method: 'GET',
+        url: "/users",
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
-          'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
+          "Content-Type": "application/json",
+          "X-Api-Key": "1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD",
         },
         params: { userId: this.$store.getters.getUserId },
       })

@@ -5,7 +5,7 @@
       <div id="register">
         <form action="" id="register__form">
           <fieldset id="register__fieldset">
-            <legend>Register</legend>
+            <legend>{{ isEdit ? "Update Profile" : "Register" }}</legend>
 
             <p id="email-input">
               <label for="email">Email</label>
@@ -89,12 +89,12 @@
 </template>
 
 <script>
-import Datepicker from 'vuejs-datepicker';
-import TweeterHeader from '../components/TweeterHeader.vue';
+import Datepicker from "vuejs-datepicker";
+import TweeterHeader from "../components/TweeterHeader.vue";
 
 export default {
   components: { TweeterHeader, Datepicker },
-  name: 'register',
+  name: "register",
 
   props: {
     isEdit: {
@@ -108,11 +108,11 @@ export default {
   data() {
     return {
       input: {
-        email: '',
-        username: '',
-        birthdate: '',
-        bio: '',
-        password: '',
+        email: "",
+        username: "",
+        birthdate: "",
+        bio: "",
+        password: "",
       },
 
       rawBirthdate: new Date(),
@@ -125,11 +125,11 @@ export default {
     if (this.isEdit) {
       this.$axios
         .request({
-          url: '/users',
-          method: 'GET',
+          url: "/users",
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
+            "Content-Type": "application/json",
+            "X-Api-Key": "1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD",
           },
           params: { userId: this.$store.getters.getUserId },
         })
@@ -149,28 +149,24 @@ export default {
 
   computed: {
     formattedBirthdate() {
-      const mydate = `${this.rawBirthdate.toLocaleDateString('en-US', {
-        year: 'numeric',
-      })
-      }-${
-        this.rawBirthdate.toLocaleDateString('en-US', {
-          month: '2-digit',
-        })
-      }-${
-        this.rawBirthdate.toLocaleDateString('en-US', {
-          day: '2-digit',
-        })}`;
+      const mydate = `${this.rawBirthdate.toLocaleDateString("en-US", {
+        year: "numeric",
+      })}-${this.rawBirthdate.toLocaleDateString("en-US", {
+        month: "2-digit",
+      })}-${this.rawBirthdate.toLocaleDateString("en-US", {
+        day: "2-digit",
+      })}`;
       return mydate;
     },
   },
 
   watch: {
-    'input.email': function () {
+    "input.email": function() {
       this.error = false;
     },
 
-    'input.password': function () {
-      if (this.input.password != '') {
+    "input.password": function() {
+      if (this.input.password != "") {
         this.error = false;
       }
     },
@@ -186,8 +182,8 @@ export default {
 
   methods: {
     register() {
-      this.$store.dispatch('register', this.input).catch((error) => {
-        this.input.password = '';
+      this.$store.dispatch("register", this.input).catch((error) => {
+        this.input.password = "";
         this.error = true;
         console.log(error);
       });
@@ -196,11 +192,11 @@ export default {
     updateProfile() {
       this.$axios
         .request({
-          url: '/users',
-          method: 'PATCH',
+          url: "/users",
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
-            'X-Api-Key': '1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD',
+            "Content-Type": "application/json",
+            "X-Api-Key": "1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD",
           },
           data: {
             loginToken: this.$store.getters.getLoginToken,
@@ -210,7 +206,7 @@ export default {
             bio: this.input.bio,
           },
         })
-        .then(this.$store.dispatch('logOut'))
+        .then(this.$store.dispatch("logOut"))
         .catch((error) => {
           console.log(error);
         });
