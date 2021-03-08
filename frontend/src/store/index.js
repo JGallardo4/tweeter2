@@ -156,7 +156,7 @@ export default new Vuex.Store({
       axios
         .post("/tweets", {
           loginToken: getters.getLoginToken,
-          password: payload,
+          content: payload,
         })
         .catch((response) => console.log(response));
     },
