@@ -57,7 +57,7 @@ export default new Vuex.Store({
     },
 
     SET_LOGIN_TOKEN(state, payload) {
-      state.loginToken = payload;
+      state.loginToken = String(payload);
     },
 
     SET_USERNAME(state, payload) {
@@ -122,15 +122,16 @@ export default new Vuex.Store({
       }
     },
 
-    register({ commit, dispatch }, payload) {
+    register({ dispatch }, payload) {
       return new Promise((resolve, reject) => {
         axios
           .post("/users", payload)
           .then((response) => {
             if (response.status === 201) {
-              commit("SET_USERID", response.data.userId);
-              commit("SET_USERNAME", response.data.username);
-              commit("SET_LOGIN_TOKEN", response.data.loginToken);
+              dispatch("logIn", {
+                email: payload["email"],
+                password: payload["password"],
+              });
               dispatch("redirect", "/");
               resolve(response);
             } else {
@@ -155,7 +156,7 @@ export default new Vuex.Store({
       axios
         .post("/tweets", {
           loginToken: getters.getLoginToken,
-          content: payload,
+          password: payload,
         })
         .catch((response) => console.log(response));
     },
@@ -169,8 +170,22 @@ export default new Vuex.Store({
           }
         })
         .catch((error) => {
-          console.log(error);
+          reject(error);
         });
+    },
+
+    deleteAccount({ state, dispatch }, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete("/users", { data: payload })
+          .then((response) => {
+            if (response.status === 204) {
+              resolve(response);
+              dispatch("logOut");
+            }
+          })
+          .catch((error) => reject(error.response));
+      });
     },
 
     refreshFollows({ state, commit }) {

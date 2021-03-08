@@ -6,6 +6,7 @@ import Register from "../views/Register.vue";
 import EditTweet from "../views/EditTweet.vue";
 import Profile from "../views/Profile.vue";
 import UserProfile from "../views/UserProfile.vue";
+import DeleteAccount from "../views/DeleteAccount.vue";
 
 Vue.use(VueRouter);
 
@@ -46,6 +47,12 @@ const routes = [
     path: "/user-profile",
     name: "UserProfile",
     component: UserProfile,
+  },
+
+  {
+    path: "/delete-account",
+    name: "DeleteAccount",
+    component: DeleteAccount,
   },
 ];
 

@@ -28,6 +28,13 @@
             </button>
           </router-link>
 
+          <router-link to="/delete-account">
+            <button type="submit" id="delete-button">
+              <span id="delete-icon"><font-awesome-icon icon="times"/></span>
+              <span id="delete-button__text">Delete Account</span>
+            </button></router-link
+          >
+
           <router-link
             :to="{
               name: 'Register',
@@ -159,6 +166,7 @@ main {
       justify-content: center;
       gap: 1rem;
       #edit-button,
+      #delete-button,
       #back-button {
         grid-row: 3;
         @include resetButton;
@@ -178,7 +186,8 @@ main {
           color: black;
           cursor: not-allowed;
         }
-        #back-button__text {
+        #back-button__text,
+        #delete-button__text {
           padding-left: 1rem;
         }
       }

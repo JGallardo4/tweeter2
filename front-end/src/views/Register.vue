@@ -182,10 +182,10 @@ export default {
 
   methods: {
     register() {
-      this.$store.dispatch("register", this.input).catch((error) => {
+      this.$store.dispatch("register", this.input).catch((response) => {
         this.input.password = "";
         this.error = true;
-        console.log(error);
+        console.log(response.status);
       });
     },
 

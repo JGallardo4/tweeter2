@@ -36,8 +36,9 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 axios.defaults.headers.common["X-Api-Key"] =
   "1Rj5dMCW6aOfA75kbtKt6Gcatc5M9Chc6IGwJKe4YdhDD";
+axios.defaults.headers.common["Content-Type"] = "application/json";
 
-axios.defaults.baseURL = "http://127.0.0.1:5000/api";
+axios.defaults.baseURL = "https://ravenblogs.tk/api";
 
 // Log user out when token expires
 axios.interceptors.response.use(
