@@ -13,7 +13,13 @@ users = Blueprint('/api/users', __name__)
 @users.route("/api/users", methods=["GET"])
 @api_key_required
 def get_users():
-    userId = request.args["userId"]
+    userId = None
+
+    try:
+        userId = request.args["userId"]
+    except Exception as e:
+        print(e)
+        
     if userId:        
         user = db_users.get_user_by_id(userId)             
         if user:

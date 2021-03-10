@@ -66,8 +66,9 @@ def get_user_by_email(email):
     return format_users(users)
     
 def format_users(users):
-    for user in users:
-        user["birthdate"] = datetime.strftime(user["birthdate"], "%Y-%m-%d")
+    if users:
+        for user in users:
+            user["birthdate"] = datetime.strftime(user["birthdate"], "%Y-%m-%d")
 
     return users
 
